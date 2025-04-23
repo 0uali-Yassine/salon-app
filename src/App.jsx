@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+"use client"
+
+import { useState, useEffect } from "react"
+import Header from "./components/Header"
+import LandingPage from "./components/LandingPage"
+import ProductList from "./components/ProductList"
+import Footer from "./components/Footer"
+import "./App.css"
+import useSWR from "swr"
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  // https://script.google.com/macros/s/AKfycbxnBrjCvFDY-oLHoJztJz_08ub7DPA3EXFjQeRUJtJERmmAt0ai4JYjxRDmithaols8_g/exec
+
+  const { data, error, isLoading } = useSWR(
+    'https://script.google.com/macros/s/AKfycbxnBrjCvFDY-oLHoJztJz_08ub7DPA3EXFjQeRUJtJERmmAt0ai4JYjxRDmithaols8_g/exec',
+    fetcher
+  );
+
+ 
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="app">
+      <Header />
+      <main>
+        <LandingPage />
+        <ProductList products={data} loading={isLoading} />
+      </main>
+      <Footer />
+    </div>
   )
 }
 
 export default App
+
